@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Cardset {
+  id            Int       @id @map("_id")
+  set_name      String
+  set_code      String
+  num_of_cards  Int
+  tcg_date      String
+  set_image     String
+  cards         Card[]    @relation(fields: [id], references: [id])
+}
+
+model Cardimage {
+  id                Int       @id @map("_id")
+  image_url         String
+  image_url_small   String
+  image_url_cropped String
+  card              Card      @relation(fields: [id], references: [id])
+}
+
+model Cardprice {
+  id                  Int       @id @map("_id")
+  cardmarket_price    String
+  tcgplayer_price     String
+  ebay_price          String
+  amazon_price        String
+  coolstuffinc_price  String
+  card                Card     @relation(fields: [id], references: [id])
+}
+
+model Card {
+  id          Int       @id @map("_id")
+  name        String
+  type        String
+  frameType   String
+  desc        String
+  atk         Int?
+  def         Int?
+  level       Int?
+  race        String?
+  attribute   String?
+  archetype   String?
+  scale       Int?
+  linkval     Int?
+  linkmarkers String?
+  cardsets    Cardset[]
+  cardimages  Cardimage[]
+  cardprices  Cardprice[]
+}
